@@ -1,6 +1,6 @@
 name: otel_azure_key_vault
 description: "Dartastic OpenTelemetry bridge for Azure Key Vault (secrets / keys / certificates)."
-version: 0.1.0-beta.1-wip
+version: 0.1.0-beta.1
 repository: https://github.com/dartastic/otel_azure_key_vault
 homepage: https://dartastic.io
 publish_to: https://pub.dartastic.io
