@@ -1,15 +1,16 @@
-// Licensed under the Dartastic Pro Software License Agreement.
+// Licensed under the Apache License, Version 2.0
 // Copyright 2025-2026 Mindful Software LLC d/b/a Dartastic.io, All rights reserved.
 
-import 'package:dartastic_opentelemetry/dartastic_opentelemetry.dart';
+import 'package:dartastic_opentelemetry_api/dartastic_opentelemetry_api.dart';
 
 import 'otel_azure_key_vault_suppression.dart';
 
 const _tracerName = 'dartastic_otel_libs_azure_key_vault';
 
-Tracer _tracer() => OTel.tracerProvider().getTracer(_tracerName);
+APITracer _tracer() => OTelAPI.tracerProvider().getTracer(_tracerName);
 
 class AzureKeyVaultResult {
+  /// Creates a result.
   const AzureKeyVaultResult({
     this.vaultName,
     this.vaultKind,
@@ -92,8 +93,13 @@ class AzureKeyVaultResult {
   final int? statusCode;
 }
 
+/// What a traced call returned: the value for the caller plus fields
+/// recorded on the span.
 class AzureKeyVaultCallResult<T> {
+  /// Creates a call result.
   const AzureKeyVaultCallResult({required this.value, this.result});
+
+  /// The value returned to the caller.
   final T value;
   final AzureKeyVaultResult? result;
 }
@@ -127,7 +133,7 @@ Future<T> tracedAzureKeyVault<T>({
   final span = _tracer().startSpan(
     'azure_key_vault $operation',
     kind: SpanKind.client,
-    attributes: OTel.attributesFromMap(m),
+    attributes: OTelAPI.attributesFromMap(m),
   );
   try {
     final r = await invoke();
@@ -135,140 +141,140 @@ Future<T> tracedAzureKeyVault<T>({
       final res = r.result!;
       final extras = <Attribute<Object>>[];
       if (res.vaultName != null) {
-        extras.add(OTel.attributeString(
+        extras.add(OTelAPI.attributeString(
           'azure_key_vault.vault.name',
           res.vaultName!,
         ));
       }
       if (res.vaultKind != null) {
-        extras.add(OTel.attributeString(
+        extras.add(OTelAPI.attributeString(
           'azure_key_vault.vault.kind',
           res.vaultKind!,
         ));
       }
       if (res.entityKind != null) {
-        extras.add(OTel.attributeString(
+        extras.add(OTelAPI.attributeString(
           'azure_key_vault.entity.kind',
           res.entityKind!,
         ));
       }
       if (res.entityName != null) {
-        extras.add(OTel.attributeString(
+        extras.add(OTelAPI.attributeString(
           'azure_key_vault.entity.name',
           res.entityName!,
         ));
       }
       if (res.entityVersion != null) {
-        extras.add(OTel.attributeString(
+        extras.add(OTelAPI.attributeString(
           'azure_key_vault.entity.version',
           res.entityVersion!,
         ));
       }
       if (res.keyType != null) {
-        extras.add(OTel.attributeString(
+        extras.add(OTelAPI.attributeString(
           'azure_key_vault.key.type',
           res.keyType!,
         ));
       }
       if (res.keyCurve != null) {
-        extras.add(OTel.attributeString(
+        extras.add(OTelAPI.attributeString(
           'azure_key_vault.key.curve',
           res.keyCurve!,
         ));
       }
       if (res.keySizeBits != null) {
-        extras.add(OTel.attributeInt(
+        extras.add(OTelAPI.attributeInt(
           'azure_key_vault.key.size_bits',
           res.keySizeBits!,
         ));
       }
       if (res.keyOperations != null) {
-        extras.add(OTel.attributeStringList(
+        extras.add(OTelAPI.attributeStringList(
           'azure_key_vault.key.operations',
           res.keyOperations!,
         ));
       }
       if (res.certificateThumbprint != null) {
-        extras.add(OTel.attributeString(
+        extras.add(OTelAPI.attributeString(
           'azure_key_vault.certificate.thumbprint',
           res.certificateThumbprint!,
         ));
       }
       if (res.certificateIssuer != null) {
-        extras.add(OTel.attributeString(
+        extras.add(OTelAPI.attributeString(
           'azure_key_vault.certificate.issuer',
           res.certificateIssuer!,
         ));
       }
       if (res.cryptoAlgorithm != null) {
-        extras.add(OTel.attributeString(
+        extras.add(OTelAPI.attributeString(
           'azure_key_vault.crypto.algorithm',
           res.cryptoAlgorithm!,
         ));
       }
       if (res.signatureAlgorithm != null) {
-        extras.add(OTel.attributeString(
+        extras.add(OTelAPI.attributeString(
           'azure_key_vault.signature.algorithm',
           res.signatureAlgorithm!,
         ));
       }
       if (res.encryptedBytes != null) {
-        extras.add(OTel.attributeInt(
+        extras.add(OTelAPI.attributeInt(
           'azure_key_vault.encrypted_bytes',
           res.encryptedBytes!,
         ));
       }
       if (res.decryptedBytes != null) {
-        extras.add(OTel.attributeInt(
+        extras.add(OTelAPI.attributeInt(
           'azure_key_vault.decrypted_bytes',
           res.decryptedBytes!,
         ));
       }
       if (res.hsmBackend != null) {
-        extras.add(OTel.attributeBool(
+        extras.add(OTelAPI.attributeBool(
           'azure_key_vault.hsm_backend',
           res.hsmBackend!,
         ));
       }
       if (res.purgeProtectionEnabled != null) {
-        extras.add(OTel.attributeBool(
+        extras.add(OTelAPI.attributeBool(
           'azure_key_vault.purge_protection.enabled',
           res.purgeProtectionEnabled!,
         ));
       }
       if (res.softDeleteEnabled != null) {
-        extras.add(OTel.attributeBool(
+        extras.add(OTelAPI.attributeBool(
           'azure_key_vault.soft_delete.enabled',
           res.softDeleteEnabled!,
         ));
       }
       if (res.recoverableDays != null) {
-        extras.add(OTel.attributeInt(
+        extras.add(OTelAPI.attributeInt(
           'azure_key_vault.recoverable_days',
           res.recoverableDays!,
         ));
       }
       if (res.deletedRecoveryLevel != null) {
-        extras.add(OTel.attributeString(
+        extras.add(OTelAPI.attributeString(
           'azure_key_vault.deleted.recovery_level',
           res.deletedRecoveryLevel!,
         ));
       }
       if (res.errorCode != null) {
-        extras.add(OTel.attributeString(
+        extras.add(OTelAPI.attributeString(
           'azure_key_vault.error.code',
           res.errorCode!,
         ));
         span.setStatus(SpanStatusCode.Error, 'Key Vault ${res.errorCode}');
       }
       if (res.errorMessage != null) {
-        extras.add(OTel.attributeString(
+        extras.add(OTelAPI.attributeString(
           'azure_key_vault.error.message',
           res.errorMessage!,
         ));
       }
       if (res.statusCode != null) {
-        extras.add(OTel.attributeInt(
+        extras.add(OTelAPI.attributeInt(
           'http.response.status_code',
           res.statusCode!,
         ));
@@ -279,13 +285,13 @@ Future<T> tracedAzureKeyVault<T>({
           );
         }
       }
-      if (extras.isNotEmpty) span.addAttributes(OTel.attributes(extras));
+      if (extras.isNotEmpty) span.addAttributes(OTelAPI.attributes(extras));
     }
     return r.value;
   } catch (e, st) {
-    span.addAttributes(OTel.attributes([
-      OTel.attributeString(
-        ErrorResource.errorType.key,
+    span.addAttributes(OTelAPI.attributes([
+      OTelAPI.attributeString(
+        ErrorAttributes.errorType.key,
         e.runtimeType.toString(),
       ),
     ]));
